@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CitizenAI - Empower Your Civic Engagement</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Hide all pages by default */
+        .page-content {
+            display: none;
+        }
+        /* Show the active page */
+        .page-content.active {
+            display: block;
+        }
+        /* Typing indicator animation */
+        .typing-indicator {
+            display: flex;
+            padding: 8px 0;
+        }
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            float: left;
+            margin: 0 2px;
+            background-color: #9E9E9E;
+            display: block;
+            border-radius: 50%;
+            opacity: 0.4;
+            animation: typing 1s infinite;
+        }
+        .typing-indicator span:nth-of-type(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-of-type(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typing {
+            0% { opacity: 0.4; transform: translateY(0); }
+            25% { opacity: 1; transform: translateY(-3px); }
+            50% { opacity: 0.4; transform: translateY(0); }
+            100% { opacity: 0.4; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <!-- Navigation -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#index" class="text-2xl font-bold text-blue-600 nav-link">CitizenAI</a>
+            <nav class="hidden md:flex items-center space-x-6 text-gray-600">
+                <a href="#index" class="hover:text-blue-600 nav-link">Home</a>
+                <a href="#about" class="hover:text-blue-600 nav-link">About</a>
+                <a href="#services" class="hover:text-blue-600 nav-link">Services</a>
+                <a href="#chat" class="hover:text-blue-600 nav-link">Chat</a>
+                <a href="#dashboard" class="hover:text-blue-600 nav-link">Dashboard</a>
+                <div class="flex items-center">
+                    <a href="#login" class="hover:text-blue-600">Login</a>
+                </div>
+            </nav>
+            <div class="md:hidden">
+                <button id="mobileMenuBtn" class="p-2 rounded-md hover:bg-gray-100">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+             <a href="#index" class="block py-2 text-gray-600 hover:text-blue-600 nav-link">Home</a>
+             <a href="#about" class="block py-2 text-gray-600 hover:text-blue-600 nav-link">About</a>
+             <a href="#services" class="block py-2 text-gray-600 hover:text-blue-600 nav-link">Services</a>
+             <a href="#chat" class="block py-2 text-gray-600 hover:text-blue-600 nav-link">Chat</a>
+             <a href="#dashboard" class="block py-2 text-gray-600 hover:text-blue-600 nav-link">Dashboard</a>
+             <a href="#login" class="block py-2 text-gray-600 hover:text-blue-600">Login</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Index/Home Page -->
+        <div id="index" class="page-content">
+            <section class="py-16 bg-gradient-to-r from-blue-50 to-white">
+                <div class="container mx-auto px-6 text-center">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+                        Expert Guidance for <span class="text-blue-600">Every Citizen</span>
+                    </h1>
+                    <p class="text-xl text-gray-700 max-w-2xl mx-auto mb-8">
+                        Get personalized help with housing issues, benefits claims, legal questions, and civic rights - all in plain language.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <a href="#chat" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md transition nav-link">
+                            Start a Chat
+                        </a>
+                        <a href="#services" class="px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 font-medium rounded-lg shadow-sm transition nav-link">
+                            Explore Services
+                        </a>
+                    </div>
+                </div>
+            </section>
+            <section class="py-16 bg-white">
+                <div class="container mx-auto px-6">
+                    <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">How CitizenAI Works</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="text-center p-6">
+                            <div class="bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-2xl">1</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Describe Your Situation</h3>
+                            <p class="text-gray-600">
+                                Explain your issue in everyday language. Our AI understands complex situations.
+                            </p>
+                        </div>
+                        <div class="text-center p-6">
+                            <div class="bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-2xl">2</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Get Actionable Advice</h3>
+                            <p class="text-gray-600">
+                                Receive step-by-step guidance tailored to your specific circumstances.
+                            </p>
+                        </div>
+                        <div class="text-center p-6">
+                            <div class="bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-2xl">3</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Take Confident Action</h3>
+                            <p class="text-gray-600">
+                                Generate ready-to-use documents and letters to assert your rights.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- About Page -->
+        <div id="about" class="page-content">
+            <section class="container mx-auto px-6 py-12 flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">About <span class="text-blue-600">CitizenAI</span></h1>
+                    <p class="mt-4 text-lg text-gray-700">CitizenAI is an intelligent citizen-engagement platform built to put actionable, expert-style guidance in the hands of everyday people. We help you understand your options and create ready-to-send documents — from tenant complaints to benefits appeals — without the legalese.</p>
+                    <div class="mt-6 space-y-3">
+                        <p class="text-gray-600"><strong>Why we exist:</strong> Access to practical, trustworthy guidance should not depend on money or insider knowledge. We bridge the gap between people and the systems that affect them.</p>
+                        <p class="text-gray-600"><strong>Our promise:</strong> Fast, jargon-free, free-to-use tools that help you take confident action.</p>
+                    </div>
+                    <div class="mt-6 flex gap-4">
+                        <a href="#chat" class="inline-flex items-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow nav-link">Start a Chat</a>
+                        <a href="#services" class="inline-flex items-center gap-2 px-5 py-3 border border-gray-200 rounded-lg hover:bg-gray-100 nav-link">Explore Services</a>
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <img src="https://placehold.co/600x400/E0E7FF/4F46E5?text=CitizenAI+Mission" alt="CitizenAI Mission Illustration" class="rounded-xl shadow-lg">
+                </div>
+            </section>
+        </div>
+
+        <!-- Services Page -->
+        <div id="services" class="page-content">
+            <section class="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-16">
+                <div class="container mx-auto px-6 text-center">
+                    <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Services & Solutions</h1>
+                    <p class="text-xl max-w-2xl mx-auto">Expert guidance for civic issues, rights protection, and government interactions — all in plain language.</p>
+                </div>
+            </section>
+            <section class="container mx-auto px-6 py-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Housing -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-blue-100 text-blue-600 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                                <h2 class="text-2xl font-bold">Housing & Tenant Rights</h2>
+                            </div>
+                            <p class="text-gray-600 mb-4">Get help with landlord disputes, repairs, security deposits, evictions, and lease agreements.</p>
+                            <a href="#chat" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg nav-link">
+                                Get Help Now <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Benefits -->
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-green-100 text-green-600 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                </div>
+                                <h2 class="text-2xl font-bold">Benefits & Assistance</h2>
+                            </div>
+                            <p class="text-gray-600 mb-4">Navigate government assistance programs, appeals, and eligibility requirements.</p>
+                            <a href="#chat" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg nav-link">
+                                Get Help Now <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Chat Page -->
+        <div id="chat" class="page-content">
+            <section class="container mx-auto px-4 py-8 max-w-4xl">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="bg-blue-600 text-white px-6 py-4">
+                        <h1 class="text-2xl font-bold">CitizenAI Assistant</h1>
+                        <p class="text-blue-100">Ask about housing, benefits, legal rights, or any civic issue</p>
+                    </div>
+                    <div id="chat-history" class="h-[500px] overflow-y-auto p-6 space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="bg-blue-100 text-blue-800 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="bg-gray-100 rounded-lg px-4 py-3">
+                                <p>Hello! I'm CitizenAI. How can I help you today? Please describe your situation.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-t p-4 bg-gray-50">
+                        <form id="chat-form" class="flex space-x-3">
+                            <input type="text" id="user-input" placeholder="Describe your issue or question..." class="flex-1 px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400" autocomplete="off">
+                            <button type="submit" id="send-button" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md transition flex items-center disabled:bg-blue-400 disabled:cursor-not-allowed">
+                                <i class="fas fa-paper-plane mr-2"></i> Send
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page-content">
+             <div class="flex min-h-screen bg-gray-100">
+                <aside class="w-64 bg-white shadow-md hidden md:block">
+                    <div class="p-4 text-2xl font-bold text-blue-600 border-b">CitizenAI</div>
+                    <nav class="mt-4 space-y-2 p-2">
+                        <a href="#" class="block py-2 px-4 bg-blue-50 text-blue-600 rounded">Overview</a>
+                        <a href="#" class="block py-2 px-4 hover:bg-gray-100 rounded">Chat Logs</a>
+                    </nav>
+                </aside>
+                <main class="flex-1 p-6">
+                    <h1 class="text-3xl font-bold mb-6">Dashboard Overview</h1>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h2 class="text-lg font-semibold mb-4">Sentiment Over Time</h2>
+                            <canvas id="sentimentChart" height="250"></canvas>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <h2 class="text-lg font-semibold mb-4">Issue Categories</h2>
+                            <canvas id="categoryChart" height="250"></canvas>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 CitizenAI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Page Navigation ---
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page-content');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+
+            function showPage(pageId) {
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                const activePage = document.getElementById(pageId);
+                if (activePage) {
+                    activePage.classList.add('active');
+                }
+                window.scrollTo(0, 0);
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('href').substring(1);
+                    showPage(pageId);
+                    mobileMenu.classList.add('hidden'); // Close mobile menu on navigation
+                });
+            });
+            
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const initialPage = window.location.hash ? window.location.hash.substring(1) : 'index';
+            showPage(initialPage);
+
+            // --- Chat Functionality ---
+            const chatForm = document.getElementById('chat-form');
+            const userInput = document.getElementById('user-input');
+            const chatHistory = document.getElementById('chat-history');
+            const sendButton = document.getElementById('send-button');
+            let conversationHistory = []; // Stores the full conversation
+
+            if (chatForm) {
+                chatForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const message = userInput.value.trim();
+                    if (message) {
+                        await handleSendMessage(message);
+                    }
+                });
+            }
+            
+            async function handleSendMessage(message) {
+                addUserMessage(message);
+                userInput.value = '';
+                setLoadingState(true);
+
+                const typingIndicator = addAIMessage('', true);
+
+                try {
+                    const aiResponse = await callGeminiAPI(message);
+                    updateAIMessage(typingIndicator, aiResponse);
+                } catch (error) {
+                    updateAIMessage(typingIndicator, "Sorry, something went wrong. Please try again.");
+                } finally {
+                    setLoadingState(false);
+                }
+            }
+            
+            function setLoadingState(isLoading) {
+                userInput.disabled = isLoading;
+                sendButton.disabled = isLoading;
+            }
+
+            function addUserMessage(message) {
+                conversationHistory.push({ role: "user", parts: [{ text: message }] });
+                const messageElement = document.createElement('div');
+                messageElement.className = 'flex items-start space-x-3 justify-end';
+                messageElement.innerHTML = `
+                    <div class="bg-blue-600 text-white rounded-lg px-4 py-3 max-w-[80%]">
+                        <p>${message}</p>
+                    </div>
+                    <div class="bg-gray-300 text-gray-700 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-user"></i>
+                    </div>
+                `;
+                chatHistory.appendChild(messageElement);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }
+
+            function addAIMessage(message, isTyping = false) {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'flex items-start space-x-3';
+                const content = isTyping 
+                    ? `<div class="typing-indicator"><span></span><span></span><span></span></div>`
+                    : `<div class="message-content">${message}</div>`;
+                
+                messageElement.innerHTML = `
+                    <div class="bg-blue-100 text-blue-800 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="bg-gray-100 rounded-lg px-4 py-3 max-w-[80%]">
+                        ${content}
+                    </div>
+                `;
+                chatHistory.appendChild(messageElement);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+                return messageElement;
+            }
+            
+            function updateAIMessage(element, newMessage) {
+                const contentHolder = element.querySelector('.bg-gray-100');
+                if (contentHolder) {
+                    // Simple markdown for bold text
+                    const formattedMessage = newMessage.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+                    contentHolder.innerHTML = `<div class="message-content">${formattedMessage}</div>`;
+                }
+            }
+
+            async function callGeminiAPI(userMessage, retries = 3, delay = 1000) {
+                // NOTE: In a real application, the API key should not be hardcoded.
+                // This is a placeholder and will be managed by the execution environment.
+                const apiKey = "AIzaSyCaTvzA-TJ3laNGz2O4SZM-tDXqkk0cbw0"; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+                const payload = {
+                    contents: conversationHistory
+                };
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    const aiText = result.candidates[0].content.parts[0].text;
+                    conversationHistory.push({ role: "model", parts: [{ text: aiText }] }); // Add AI response to history
+                    return aiText;
+
+                } catch (error) {
+                    console.error('Error calling Gemini API:', error);
+                    if (retries > 0) {
+                        await new Promise(res => setTimeout(res, delay));
+                        return callGeminiAPI(userMessage, retries - 1, delay * 2); // Exponential backoff
+                    } else {
+                        return "I'm sorry, I'm having trouble connecting right now. Please try again later.";
+                    }
+                }
+            }
+
+
+            // --- Dashboard Charts ---
+            const sentimentCtx = document.getElementById('sentimentChart');
+            if (sentimentCtx) {
+                new Chart(sentimentCtx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Positive Sentiment',
+                            data: [65, 59, 80, 81, 56, 55],
+                            borderColor: '#10B981',
+                            tension: 0.1
+                        }]
+                    }
+                });
+            }
+
+            const categoryCtx = document.getElementById('categoryChart');
+            if (categoryCtx) {
+                new Chart(categoryCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Housing', 'Benefits', 'Legal', 'Safety'],
+                        datasets: [{
+                            data: [300, 50, 100, 40],
+                            backgroundColor: ['#3B82F6', '#10B981', '#8B5CF6', '#EF4444'],
+                        }]
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
