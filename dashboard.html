@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | CitizenAI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-md">
+      <div class="p-4 text-2xl font-bold text-blue-600 border-b">
+       CitizenAI 
+      </div>
+      <nav class="mt-4 space-y-2">
+        <a href="#" class="block py-2 px-4 bg-blue-50 text-blue-600 rounded">Overview</a>
+        <a href="#" class="block py-2 px-4 hover:bg-blue-50 rounded">Chat Logs</a>
+        <a href="#" class="block py-2 px-4 hover:bg-blue-50 rounded">Sentiment Reports</a>
+        <a href="#" class="block py-2 px-4 hover:bg-blue-50 rounded">Concern Reports</a>
+        <a href="#" class="block py-2 px-4 hover:bg-blue-50 rounded">Settings</a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Dashboard Overview</h1>
+        <div class="text-sm text-gray-600">
+          Last updated: <span id="current-time">{{ current_time }}</span>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div class="bg-white p-6 rounded shadow">
+          <h2 class="text-lg font-semibold text-gray-600 mb-2">Total Chats</h2>
+          <p class="text-3xl font-bold text-blue-600">1,240</p>
+          <p class="text-sm text-gray-500 mt-2">+12% from last week</p>
+        </div>
+        <div class="bg-white p-6 rounded shadow">
+          <h2 class="text-lg font-semibold text-gray-600 mb-2">Positive Sentiment</h2>
+          <p class="text-3极 font-bold text-green-600">72%</p>
+          <p class="text-sm text-gray-500 mt-2">+8% from last month</p>
+        </div>
+        <div class="bg-white p-6 rounded shadow">
+          <h2 class="text-lg font-semibold text-gray-600 mb-2">Reported Concerns</h2>
+          <p class="text-3xl font-bold text-red-600">48</p>
+          <p class="text-sm text-gray-500 mt-2">5 unresolved</p>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-white p-6 rounded shadow">
+          <h2 class="text-lg font-semibold mb-4">Sentiment Over Time</h2>
+          <canvas id="sentimentChart" height="250"></canvas>
+        </div>
+        <div class="bg-white p-6 rounded shadow">
+          <h2 class="text-lg font-semibold mb-4">Issue Categories</h2>
+          <canvas id="categoryChart" height="250"></canvas>
+        </div>
+      </div>
+
+      <!-- Concerns Table -->
+      <div class="bg-white p-6 rounded shadow">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-semibold">Recent Concerns</h2>
+          <button class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm">
+            View All
+          </button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b">
+                <th class="p-3 font-medium">Date</th>
+                <th class="p-3 font-medium">User</th>
+                <th class="p-3 font-medium">Type</th>
+                <th class="p-3 font-medium">Details</th>
+                <th class="p-3 font-medium">Status</th>
+                <th class="p-3 font-medium">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b hover:bg-gray-50">
+                <td class="p-3">2025-08-11</td>
+                <td class="p-3">john_doe</td>
+                <td class="p-3">Safety</td>
+                <td class="p-3 max-w-xs truncate">Unsafe building conditions in apartment complex</td>
+                <td class="p-3"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Resolved</span></td>
+                <td class="p-3">
+                  <button class="text-blue-600 hover:underline text-sm">View</button>
+                </td>
+              </tr>
+              <tr class="border-b hover:bg-gray-50">
+                <td class="p-3">2025-08-10</td>
+                <td class="p-3">jane_smith</td>
+                <td class="p-3">Bias</td>
+                <td class="p-3 max-w-xs truncate">Potential bias in benefits eligibility response</td>
+                <td class="p-3"><span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">Pending</span></td>
+                <td class="p-3">
+                  <button class="text-blue-600 hover:underline text-sm">View</button>
+                </td>
+              </tr>
+              <tr class="border-b hover:bg-gray-50">
+                <td class="p-3">2025-08-09</td>
+                <td class="p-3">user_789</td>
+                <td class="p-3">Inaccuracy</td>
+                <td class="p-3 max-w-xs truncate">Incorrect information about tenant rights</td>
+                <td class="p-3"><span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">Pending</span></td>
+                <td class="p-3">
+                  <button class="text-blue-600 hover:underline text-sm">View</button>
+                </td>
+              </tr>
+              <tr class="border-b hover:bg-gray-50">
+                <td class="p-3">2025-08-08</td>
+                <td class="p-3">mike_jones</td>
+                <td class="p-3">Safety</td>
+                <td class="p-3 max-w-xs truncate">Reporting dangerous intersection near school</td>
+                <td class="p-3"><span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Resolved</span></td>
+                <td class="p-3">
+                  <button class="text-blue-600 hover:underline text-sm">View</button>
+                </td>
+              </tr>
+              <tr class="border-b hover:bg-gray-50">
+                <td class="p-3">2025-08-07</td>
+                <td class="p-3">sarah_k</td>
+                <td class="p-3">Other</td>
+                <td class="p-3 max-w-xs truncate">Confusion about document submission process</td>
+                <td class="p-3"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">In Review</span></td>
+                <td class="p-3">
+                  <button class="text-blue-600 hover:underline text-sm">View</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Update current time
+      const now = new Date();
+      document.getElementById('current-time').textContent = now.toLocaleString();
+      
+      // Sentiment Chart
+      const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
+      const sentimentChart = new Chart(sentimentCtx, {
+        type: 'line',
+        data: {
+          labels: ['Jul 28', 'Jul 29', 'Jul 30', 'Jul 31', 'Aug 1', 'Aug 2', 'Aug 3', 'Aug 4', 'Aug 5', 'Aug 6', 'Aug 7', 'Aug 8', 'Aug 9', 'Aug 10'],
+          datasets: [{
+            label: 'Positive Sentiment',
+            data: [65, 59, 70, 68, 72, 75, 77, 75, 72, 70, 73, 75, 74, 76],
+            borderColor: '#10B981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            tension: 0.3,
+            fill: true
+          }, {
+            label: 'Negative Sentiment',
+            data: [15, 18, 12, 14, 11, 9, 8, 10, 12, 14, 11, 9, 10, 8],
+            borderColor: '#EF4444',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return value + '%';
+                }
+              }
+            }
+          }
+        }
+      });
+      
+      // Category Chart
+      const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+      const categoryChart = new Chart(categoryCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Housing', 'Benefits', 'Legal', 'Safety', 'Consumer', 'Other'],
+          datasets: [{
+            label: 'Issue Categories',
+            data: [35, 25, 15, 12, 8, 5],
+            backgroundColor: [
+              '#3B82F6',
+              '#10B981',
+              '#8B5CF6',
+              '#EF4444',
+              '#F59E0B',
+              '#6B7280'
+            ],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'right',
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

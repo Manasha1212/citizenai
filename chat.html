@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat | CitizenAI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Axios is no longer needed for the chat functionality -->
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Navigation -->
+  <header class="bg-white shadow-sm">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="text-2xl font-bold text-blue-600">CitizenAI</a>
+      <nav class="hidden md:flex items-center space-x-6 text-gray-600">
+        <a href="#" class="hover:text-blue-600">Home</a>
+        <a href="#" class="hover:text-blue-600">About</a>
+        <a href="#" class="hover:text-blue-600">Services</a>
+        <a href="#" class="text-blue-600 font-medium">Chat</a>
+        {% if 'user' in session %}
+          <a href="/dashboard" class="hover:text-blue-600">Dashboard</a>
+        {% endif %}
+        
+        <div class="flex items-center">
+          {% if 'user' in session %}
+            <div class="mr-4">
+              <span class="text-sm">Hi, {{ session.user.first_name }}</span>
+            </div>
+            <a href="/logout" class="hover:text-blue-600">Logout</a>
+          {% else %}
+            <a href="/login" class="hover:text-blue-600">Login</a>
+          {% endif %}
+        </div>
+      </nav>
+      <div class="md:hidden">
+        <button id="mobileMenuBtn" class="p-2 rounded-md hover:bg-gray-100">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Chat Container -->
+  <section class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+      <!-- Chat Header -->
+      <div class="bg-blue-600 text-white px-6 py-4">
+        <h1 class="text-2xl font-bold">CitizenAI Assistant</h1>
+        <p class="text-blue-100">Ask about housing, benefits, legal rights, or any civic issue</p>
+      </div>
+      
+      <!-- Chat History -->
+      <div id="chat-history" class="h-[500px] overflow-y-auto p-6 space-y-4">
+        <!-- AI Welcome Message -->
+        <div class="flex items-start space-x-3">
+          <div class="bg-blue-100 text-blue-800 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <div class="bg-gray-100 rounded-lg px-4 py-3">
+            <p>Hello! I'm CitizenAI. How can I help you today? You can ask about:</p>
+            <ul class="list-disc pl-5 mt-2 space-y-1">
+              <li>Tenant rights and housing issues</li>
+              <li>Government benefits and applications</li>
+              <li>Consumer rights and legal protections</li>
+              <li>Reporting safety concerns</li>
+              <li>And much more...</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Chat Input -->
+      <div class="border-t p-4 bg-gray-50">
+        <form id="chat-form" class="flex space-x-3">
+          <input 
+            type="text" 
+            id="user-input" 
+            placeholder="Describe your issue or question..." 
+            class="flex-1 px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400"
+            autocomplete="off"
+          >
+          <button 
+            type="submit" 
+            id="send-button"
+            class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md transition flex items-center disabled:bg-blue-400 disabled:cursor-not-allowed"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+            Send
+          </button>
+        </form>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button class="quick-btn px-3 py-1.5 text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-full">
+            Tenant rights
+          </button>
+          <button class="quick-btn px-3 py-1.5 text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-full">
+            Benefits appeal
+          </button>
+          <button class="quick-btn px-3 py-1.5 text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-full">
+            Safety concern
+          </button>
+          <button class="quick-btn px-3 py-1.5 text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-full">
+            Legal letter
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Feedback & Report -->
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold mb-3">How was your experience?</h3>
+        <div class="flex space-x-2 mb-4">
+          <button class="sentiment-btn w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200" data-value="1">😞</button>
+          <button class="sentiment-btn w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200" data-value="2">😐</button>
+          <button class="sentiment-btn w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200" data-value="3">🙂</button>
+          <button class="sentiment-btn w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200" data-value="4">😊</button>
+          <button class="sentiment-btn w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200" data-value="5">😍</button>
+        </div>
+        <textarea 
+          id="feedback-input" 
+          placeholder="Optional feedback (what was helpful or could be better?)" 
+          class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400"
+          rows="2"
+        ></textarea>
+        <button id="submit-feedback" class="mt-3 px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white rounded-lg">
+          Submit Feedback
+        </button>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold mb-3">Report a Concern</h3>
+        <p class="text-gray-600 text-sm mb-4">
+          If you encountered an issue or have a serious concern, please let us know.
+        </p>
+        <select id="concern-type" class="w-full px-4 py-2 rounded-lg border mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <option value="" disabled selected>Select concern type</option>
+          <option value="safety">Safety Issue</option>
+          <option value="inaccuracy">Inaccurate Information</option>
+          <option value="bias">Bias or Discrimination</option>
+          <option value="other">Other Concern</option>
+        </select>
+        <textarea 
+          id="concern-input" 
+          placeholder="Describe your concern..." 
+          class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-400"
+          rows="2"
+        ></textarea>
+        <button id="submit-concern" class="mt-3 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">
+          Report Concern
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-300 py-6 mt-12">
+    <div class="container mx-auto px-6 text-center">
+      <p>&copy; 2025 CitizenAI • Built for people, powered by community + responsible AI.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const chatForm = document.getElementById('chat-form');
+      const userInput = document.getElementById('user-input');
+      const chatHistory = document.getElementById('chat-history');
+      const sendButton = document.getElementById('send-button');
+      const quickButtons = document.querySelectorAll('.quick-btn');
+            const sentimentButtons = document.querySelectorAll('.sentiment-btn');
+      const submitFeedback = document.getElementById('submit-feedback');
+      const submitConcern = document.getElementById('submit-concern');
+      let chatHistoryArr = []; // To store conversation history
+
+      // --- Core Chat Functions ---
+
+      /**
+       * Adds a user's message to the chat window.
+       * @param {string} message - The message text from the user.
+       */
+      function addUserMessage(message) {
+        const messageElement = document.createElement('div');
+        messageElement.className = 'flex items-start space-x-3 justify-end';
+        messageElement.innerHTML = `
+          <div class="bg-blue-600 text-white rounded-lg px-4 py-3 max-w-[80%]">
+            <p>${message}</p>
+          </div>
+          <div class="bg-gray-300 text-gray-700 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </div>
+        `;
+        chatHistory.appendChild(messageElement);
+        scrollToBottom();
+      }
+
+      /**
+       * Adds the AI's message to the chat window, with an optional typing indicator.
+       * @param {string} message - The message text from the AI.
+       * @param {boolean} isTyping - If true, shows a typing indicator.
+       * @returns {HTMLElement} - The message element that was added.
+       */
+      function addAIMessage(message, isTyping = false) {
+        const messageId = `ai-message-${Date.now()}`;
+        const messageElement = document.createElement('div');
+        messageElement.className = 'flex items-start space-x-3';
+        messageElement.id = messageId;
+
+        const content = isTyping 
+          ? `<div class="typing-indicator"><span></span><span></span><span></span></div>`
+          : `<p>${message}</p>`;
+
+        messageElement.innerHTML = `
+          <div class="bg-blue-100 text-blue-800 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <div class="bg-gray-100 rounded-lg px-4 py-3 max-w-[80%] message-content">
+            ${content}
+          </div>
+        `;
+        chatHistory.appendChild(messageElement);
+        scrollToBottom();
+        return messageElement;
+      }
+
+       /**
+       * Updates a message element, typically from a typing indicator to the final text.
+       * @param {HTMLElement} messageElement - The HTML element of the message to update.
+       * @param {string} newText - The final text from the AI.
+       */
+      function updateAIMessage(messageElement, newText) {
+          const messageContent = messageElement.querySelector('.message-content');
+          if(messageContent) {
+              // Basic markdown for bolding and lists
+              let formattedText = newText
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\* (.*?)(?=\n\* |$)/g, '<ul class="list-disc pl-5"><li>$1</li></ul>')
+                .replace(/<\/ul>\n<ul class="list-disc pl-5">/g, ''); // Merge lists
+
+              messageContent.innerHTML = `<p>${formattedText.replace(/\n/g, '<br>')}</p>`;
+          }
+      }
+
+      /**
+       * Scrolls the chat history to the bottom.
+       */
+      function scrollToBottom() {
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+      }
+
+      /**
+       * Toggles the UI state between loading and active.
+       * @param {boolean} isLoading - True if waiting for a response.
+       */
+      function setLoadingState(isLoading) {
+        userInput.disabled = isLoading;
+        sendButton.disabled = isLoading;
+        if (isLoading) {
+          sendButton.classList.add('opacity-50', 'cursor-not-allowed');
+        } else {
+          sendButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+      }
+
+      // --- Gemini API Integration ---
+
+      /**
+       * Calls the Gemini API with retry logic.
+       * @param {string} userMessage - The user's message.
+       * @param {number} retries - The number of retry attempts.
+       * @param {number} delay - The delay in ms before retrying.
+       */
+      async function callGeminiAPI(userMessage, retries = 3, delay = 1000) {
+        const apiKey = "AIzaSyCaTvzA-TJ3laNGz2O4SZM-tDXqkk0cbw0"; // This will be handled by the execution environment.
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+        // Add user message to history
+        chatHistoryArr.push({ role: "user", parts: [{ text: userMessage }] });
+
+        const payload = { contents: chatHistoryArr };
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                // If response is not OK, throw an error to trigger retry
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                
+                const aiText = result.candidates[0].content.parts[0].text;
+                // Add AI response to history
+                chatHistoryArr.push({ role: "model", parts: [{ text: aiText }] });
+                return aiText;
+            } else {
+                // Handle cases where the response structure is unexpected
+                console.error("Unexpected API response structure:", result);
+                return "I received a response, but it was in a format I don't understand.";
+            }
+
+        } catch (error) {
+            console.error('Error calling Gemini API:', error);
+            if (retries > 0) {
+                console.log(`Retrying... attempts left: ${retries - 1}`);
+                await new Promise(res => setTimeout(res, delay));
+                return callGeminiAPI(userMessage, retries - 1, delay * 2); // Exponential backoff
+            } else {
+                return "I'm sorry, but I'm having trouble connecting to my services right now. Please try again later.";
+            }
+        }
+      }
+      
+      /**
+       * Main function to handle sending a message.
+       * @param {string} message - The message to send.
+       */
+      async function sendMessage(message) {
+        if (!message) return;
+
+        setLoadingState(true);
+        addUserMessage(message);
+        userInput.value = '';
+        
+        const typingIndicator = addAIMessage('', true);
+
+        const aiResponse = await callGeminiAPI(message);
+        
+        updateAIMessage(typingIndicator, aiResponse);
+        setLoadingState(false);
+        userInput.focus();
+      }
+
+      // --- Event Listeners ---
+      
+      chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const message = userInput.value.trim();
+        sendMessage(message);
+      });
+      
+      quickButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const message = this.innerText.trim();
+          sendMessage(message);
+        });
+      });
+
+      // --- Feedback & Concern (Placeholder) ---
+      // These functions are kept for UI completeness but would need a backend.
+      document.querySelectorAll('.sentiment-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          document.querySelectorAll('.sentiment-btn').forEach(btn => btn.classList.remove('bg-blue-500', 'text-white'));
+          this.classList.add('bg-blue-500', 'text-white');
+        });
+      });
+
+      document.getElementById('submit-feedback').addEventListener('click', () => {
+        alert('Thank you for your feedback!');
+      });
+
+      document.getElementById('submit-concern').addEventListener('click', () => {
+        alert('Your concern has been noted. Thank you.');
+      });
+
+    });
+  </script>
+  <style>
+    /* Typing indicator animation */
+    .typing-indicator {
+      display: flex;
+      padding: 8px 0;
+    }
+    .typing-indicator span {
+      height: 8px;
+      width: 8px;
+      float: left;
+      margin: 0 2px;
+      background-color: #9E9E9E;
+      display: block;
+      border-radius: 50%;
+      opacity: 0.4;
+      animation: typing 1s infinite;
+    }
+    .typing-indicator span:nth-of-type(2) {
+      animation-delay: 0.2s;
+    }
+    .typing-indicator span:nth-of-type(3) {
+      animation-delay: 0.4s;
+    }
+    @keyframes typing {
+      0% { opacity: 0.4; transform: translateY(0); }
+      25% { opacity: 1; transform: translateY(-3px); }
+      50% { opacity: 0.4; transform: translateY(0); }
+      100% { opacity: 0.4; transform: translateY(0); }
+    }
+  </style>
+</body>
+</html>

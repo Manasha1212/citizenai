@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | CitizenAI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+  <!-- Navigation -->
+  <header class="bg-white shadow-sm">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="text-2xl font-bold text-blue-600">CitizenAI</a>
+      <nav class="flex items-center space-x-6 text-gray-600">
+        <a href="/" class="hover:text-blue-600">Home</a>
+        <a href="/about" class="text-blue-600 font-medium">About</a>
+        <a href="/services" class="hover:text-blue-600">Services</a>
+        <a href="/chat" class="hover:text-blue-600">Chat</a>
+        
+        {% if 'user' in session %}
+          <a href="/dashboard" class="hover:text-blue-600">Dashboard</a>
+        {% endif %}
+        
+        <div class="flex items-center">
+          {% if 'user' in session %}
+            <div class="mr-4">
+              <span class="text-sm">Hi, {{ session.user.first_name }}</span>
+            </div>
+            <a href="/logout" class="hover:text-blue-600">Logout</a>
+          {% else %}
+            <a href="/login" class="hover:text-blue-600">Login</a>
+          {% endif %}
+        </div>
+      </nav>
+      <div class="md:hidden">
+        <button id="mobileMenuBtn" class="p-2 rounded-md hover:bg-gray-100">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="container mx-auto px-6 py-12 flex flex-col lg:flex-row items-center gap-12">
+    <div class="lg:w-1/2">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">About <span class="text-blue-600">CitizenAI</span></h1>
+      <p class="mt-4 text-lg text-gray-700">CitizenAI is an intelligent citizen-engagement platform built to put actionable, expert-style guidance in the hands of everyday people. We help you understand your options and create ready-to-send documents — from tenant complaints to benefits appeals — without the legalese.</p>
+
+      <div class="mt-6 space-y-3">
+        <p class="text-gray-600"><strong>Why we exist:</strong> Access to practical, trustworthy guidance should not depend on money or insider knowledge. We bridge the gap between people and the systems that affect them.</p>
+        <p class="text-gray-600"><strong>Our promise:</strong> Fast, jargon-free, free-to-use tools that help you take confident action.</p>
+      </div>
+
+      <div class="mt-6 flex gap-4">
+        <a href="/chat" class="inline-flex items-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow">Start a Chat</a>
+        <a href="/services" class="inline-flex items-center gap-2 px-5 py-3 border border-gray-200 rounded-lg hover:bg-gray-100">Explore Services</a>
+      </div>
+    </div>
+
+    <div class="lg:w-1/2">
+      <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-80"></div>
+    </div>
+  </section>
+
+  <!-- Mission & Vision -->
+  <section class="bg-white border-t border-b py-10">
+    <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-8">
+      <div>
+        <h3 class="text-2xl font-semibold">Our Mission</h3>
+        <p class="mt-3 text-gray-700">To democratize civic support: make clear, actionable help available to every person so they can resolve problems, assert their rights, and make informed choices.</p>
+      </div>
+      <div>
+        <h3 class="text-2xl font-semibold">Our Vision</h3>
+        <p class="mt-3 text-gray-700">A future where people don't need gatekeepers to access fair outcomes — where information, tools, and guidance are accessible and trusted by all.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="container mx-auto px-6 py-12">
+    <h2 class="text-3xl font-bold text-gray-900">Key Capabilities</h2>
+    <p class="mt-2 text-gray-600">What CitizenAI can do for you — powered by modern AI and built with civic trust in mind.</p>
+
+    <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <article class="p-6 bg-white rounded-lg shadow-sm border">
+        <h4 class="font-semibold">Chat Responses</h4>
+        <p class="mt-2 text-gray-600 text-sm">Natural-language conversations to understand your issue and generate tailored documents, templates, and next steps.</p>
+      </article>
+
+      <article class="p-6 bg-white rounded-lg shadow-sm border">
+        <h4 class="font-semibold">Sentiment Analysis</h4>
+        <p class="mt-2 text-gray-600 text-sm">Tone-aware responses: we detect urgency or frustration so replies are empathetic and appropriate.</p>
+      </article>
+
+      <article class="p-6 bg-white rounded-lg shadow-sm border">
+        <h4 class="font-semibold">Concern Reporting</h4>
+        <p class="mt-2 text-gray-600 text-sm">Users can flag problems; reports are logged and routed for review or follow-up by community managers.</p>
+      </article>
+
+      <article class="p-6 bg-white rounded-lg shadow-sm border">
+        <h4 class="font-semibold">Dashboard Insights</h4>
+        <p class="mt-2 text-gray-600 text-sm">Admins get analytics on trends, common issues, sentiment over time, and system performance to inform action.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Tech Stack -->
+  <section class="bg-gradient-to-r from-blue-50 to-white py-12">
+    <div class="container mx-auto px-6">
+      <h3 class="text-2xl font-bold">AI & Engineering Stack</h3>
+      <p class="mt-3 text-gray-700">CitizenAI uses a mix of proven libraries and models to deliver reliable, efficient, and explainable results.</p>
+
+      <div class="mt-6 grid sm:grid-cols-2 gap-6">
+        <div class="p-6 bg-white rounded-lg border shadow-sm">
+          <h4 class="font-semibold">Core Model</h4>
+          <p class="mt-2 text-gray-600">IBM Granite — an enterprise-grade LLM tuned for instruction-style tasks and robust NLU.</p>
+        </div>
+
+        <div class="p-6 bg-white rounded-lg border shadow-sm">
+          <h4 class="font-semibold">Libraries & Tools</h4>
+          <ul class="mt-2 text-gray-600 list-disc pl-5 space-y-1 text-sm">
+            <li>Flask — web framework for routing, templating, and session handling</li>
+            <li>PyTorch — model backend for efficient inference</li>
+            <li>transformers, accelerate, bitsandbytes — Hugging Face tooling for model loading, quantization, and multi-device handling</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="mt-4 text-sm text-gray-500">We also follow library docs closely around model loading, inference, quantization (8-bit/4-bit), and device placement to ensure smooth, cost-effective deployments.</p>
+    </div>
+  </section>
+
+  <!-- Team & Contact CTA -->
+  <section class="container mx-auto px-6 py-12">
+    <div class="grid lg:grid-cols-3 gap-8 items-center">
+      <div class="lg:col-span-2">
+        <h3 class="text-2xl font-bold">Built with care by a small team</h3>
+        <p class="mt-3 text-gray-700">We're a compact cross-functional crew: product folks, civic lawyers (consulting), data scientists, and engineers. Our approach blends traditional civic knowledge with modern AI to produce grounded, useful outputs.</p>
+        <ul class="mt-4 text-sm text-gray-600 list-disc pl-5 space-y-1">
+          <li>Human-in-the-loop review for high-stakes templates</li>
+          <li>Privacy-first data handling and opt-in telemetry</li>
+          <li>Transparent model disclaimers and citation when needed</li>
+        </ul>
+      </div>
+
+      <div class="bg-white rounded-lg p-6 border shadow-sm">
+        <h4 class="font-semibold">Get in touch</h4>
+        <p class="mt-2 text-gray-600 text-sm">Have partnership ideas, feedback, or want to volunteer as a reviewer? Drop us a line.</p>
+        <a href="mailto:hello@citizenai.example" class="mt-4 inline-block text-blue-600 hover:underline text-sm">hello@citizenai.example</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-300 py-6">
+    <div class="container mx-auto px-6 text-center">
+      <p>&copy; 2025 CitizenAI • Built for people, powered by community + responsible AI.</p>
+    </div>
+  </footer>
+</body>
+</html>
